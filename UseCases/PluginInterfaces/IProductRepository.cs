@@ -17,5 +17,7 @@ namespace UseCases.PluginInterfaces
         Product GetProductById(int productId);
 
         void DeleteProduct(int productId);
+
+        IEnumerable<Product> GetProductsByCategory(int categoryId);
     }
 }

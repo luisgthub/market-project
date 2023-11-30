@@ -2,6 +2,7 @@ using market.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Plugins.DataStore.InMemory;
+using UseCases;
 using UseCases.CategoriesUseCases;
 using UseCases.PluginInterfaces;
 using UseCases.ProductsUseCases;
@@ -15,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+
 
 
 builder.Services.AddScoped<ICategoryRepository, CategoryInMemoryRepository>();
@@ -32,6 +33,8 @@ builder.Services.AddTransient<IAddProductUseCase, AddProductUseCase>();
 builder.Services.AddTransient<IEditProductUseCase, EditProductUseCase>();
 builder.Services.AddTransient<IGetProductByIdUseCase, GetProductByIdUseCase>();
 builder.Services.AddTransient<IDeleteProductUseCase, DeleteProductUseCase>();
+
+builder.Services.AddTransient<IViewProductsByCategoryId, ViewProductsByCategoryId>();
 
 var app = builder.Build();
 
