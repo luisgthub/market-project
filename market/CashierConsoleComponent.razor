@@ -2,7 +2,17 @@
 <h3>Cashier Console</h3>
 <br/>
 
-<market.Controls.SelectProductForSellingComponent></market.Controls.SelectProductForSellingComponent>
+<market.Controls.SelectProductForSellingComponent OnProductSelected="SelectProduct"></market.Controls.SelectProductForSellingComponent>
+<SellProductComponent SelectedProduct="selectedProduct" OnProductSold="SellProduct"></SellProductComponent>
 @code {
+    private Product selectedProduct;
 
+    private void SelectProduct(Product product)
+    {
+        selectedProduct = product;
+    }
+    private void SellProduct(Product product)
+    {
+
+    }
 }
