@@ -1,9 +1,12 @@
 ﻿@using UseCases.UseCaseInterfaces;
 @inject IGetProductByIdUseCase GetProductByIdUseCase
-
-@if(productToSell != null)
-{
-    <EditForm Model="productToSell" OnInvalidSubmit="SellProduct">
+@inject ISellProductUseCase SellProductUseCase
+@if(productToSell != null) {   
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <div class="alert alert-danger">@errorMessage</div>
+    }
+    <EditForm Model="productToSell" OnValidSubmit="SellProduct">
         <DataAnnotationsValidator></DataAnnotationsValidator>
         <ValidationSummary></ValidationSummary>
 
@@ -20,11 +23,13 @@
             <label for="quantity">Quantity</label>
             <InputNumber id="quantity" @bind-Value="@productToSell.Quantity" class="form-control"></InputNumber>
         </div>
-
+        <button type="submit" class="btn btn-primary">Sell</button>
     </EditForm>
 
-    <div class="alert alert-danger">@errorMessage</div>
+
+  
 }
+
 @code {
     private Product productToSell;
     private string errorMessage;
@@ -53,10 +58,12 @@
     public void SellProduct()
     {
         var product = GetProductByIdUseCase.Execute(productToSell.ProductId);
-        if (product.Quantity >= productToSell.Quantity)
+        if (productToSell.Quantity <= 0)
         {
+            errorMessage = "Quantidade menor que a disponivel no estoque";
+        } else if(product.Quantity >= productToSell.Quantity) {
             OnProductSold.InvokeAsync(productToSell);
-            errorMessage = string.Empty;
+            SellProductUseCase.Execute(productToSell.ProductId, productToSell.Quantity);
         } else
         {
             errorMessage = $"{product.Name} tem apenas {product.Quantity} unidades restantes.";
